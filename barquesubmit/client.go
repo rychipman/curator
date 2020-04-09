@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"strings"
 
@@ -175,13 +176,13 @@ type JobStatus struct {
 }
 
 func (c *Client) handleError(code int, body io.ReadCloser) gimlet.ErrorResponse {
-	out := gimlet.ErrorResponse{}
-	err := gimlet.GetJSON(body, &out)
+	data, err := ioutil.ReadAll(body)
 	if err != nil {
-		out.Message = errors.Wrap(err, "problem parsing error response").Error()
-		out.StatusCode = code
+		panic(err)
 	}
-	return out
+	fmt.Printf(">>> handling error: %s\n", string(data))
+	gout := gimlet.ErrorResponse{}
+	return gout
 }
 
 func (c *Client) CheckJobStatus(ctx context.Context, id string) (*JobStatus, error) {
