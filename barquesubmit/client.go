@@ -84,6 +84,7 @@ type userAPIKeyResponse struct {
 }
 
 func (c *Client) Login(ctx context.Context, username, password string) error {
+	fmt.Printf(">>> calling client login with username=%s and password=%s\n", username, password)
 	client := utility.GetDefaultHTTPRetryableClient()
 	defer utility.PutHTTPClient(client)
 

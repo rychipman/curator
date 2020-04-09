@@ -317,7 +317,7 @@ func submitRepo(ctx context.Context, info barqueServiceInfo, configPath, distro,
 		client.SetCredentials(info.username, info.apiKey)
 		fmt.Printf(">>> set creds for client client: %+v\n", client)
 	} else if err = client.Login(ctx, info.username, info.password); err != nil {
-		fmt.Printf(">>> error calling login in `else`\n")
+		fmt.Printf(">>> error calling login in `else`: %#v\n", err)
 		return errors.Wrap(err, "problem authenticating to barque")
 	}
 
