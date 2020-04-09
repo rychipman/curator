@@ -275,6 +275,8 @@ type barqueServiceInfo struct {
 }
 
 func submitRepo(ctx context.Context, info barqueServiceInfo, configPath, distro, edition, version, arch string, packages []string) error {
+	fmt.Printf(">>> running submit repo with service info: %+v\n", info)
+
 	// validate inputs
 	if edition == "community" {
 		edition = "org"
@@ -309,10 +311,13 @@ func submitRepo(ctx context.Context, info barqueServiceInfo, configPath, distro,
 	if err != nil {
 		return errors.Wrap(err, "problem constructing barque client")
 	}
+	fmt.Printf(">>> created new barque submit client: %+v\n", client)
 
 	if info.username != "" && info.apiKey != "" {
 		client.SetCredentials(info.username, info.apiKey)
+		fmt.Printf(">>> set creds for client client: %+v\n", client)
 	} else if err = client.Login(ctx, info.username, info.password); err != nil {
+		fmt.Printf(">>> error calling login in `else`\n")
 		return errors.Wrap(err, "problem authenticating to barque")
 	}
 
