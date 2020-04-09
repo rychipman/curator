@@ -94,15 +94,18 @@ func (c *Client) Login(ctx context.Context, username, password string) error {
 		return errors.Wrap(err, "problem marshaling login payload")
 	}
 
+	fmt.Printf(">>> making request with payload: %s\n", string(payload))
 	req, err := c.makeRequest(ctx, "admin/login", http.MethodPost, bytes.NewBuffer(payload))
 	if err != nil {
 		return errors.Wrap(err, "problem building login request")
 	}
+	fmt.Printf(">>> constructed req: %+v\n", req)
 
 	resp, err := client.Do(req)
 	if err != nil {
 		return errors.Wrap(err, "problem making login request")
 	}
+	fmt.Printf(">>> got res: %+v\n", resp)
 
 	if resp.StatusCode != http.StatusOK {
 		return c.handleError(resp.StatusCode, resp.Body)
